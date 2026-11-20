@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Church Members' Bio-Data Form</title>
+<style>
+  :root{
+    --red-900:#4A1010;
+    --red-700:#6E1717;
+    --red-600:#7E1B1B;
+    --gold-600:#B8862A;
+    --gold-500:#C9971E;
+    --gold-100:#F4E6C2;
+    --cream:#FAF5E9;
+    --paper:#FFFFFF;
+    --ink:#2A1E14;
+    --ink-muted:#6E5F4E;
+    --line:#E3D9C4;
+    --danger:#A32D2D;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 0 60px;}
+
+  header{
+    background:linear-gradient(180deg,var(--red-700) 0%,var(--red-900) 100%);
+    color:#fff;
+    padding:36px 24px 28px;
+    text-align:center;
+    border-bottom:5px solid var(--gold-500);
+  }
+  header .logo-badge{
+    width:76px;height:60px;
+    margin:0 auto 14px;
+    background:#fff;
+    border-radius:10px;
+    padding:5px;
+    box-shadow:0 0 0 3px var(--gold-500);
+    display:flex;align-items:center;justify-content:center;
+  }
+  header .logo-badge img{
+    width:100%;height:100%;
+    object-fit:contain;
+  }
+  header h1{
+    font-size:20px;margin:0 0 4px;font-weight:600;letter-spacing:0.3px;
+  }
+  header .district{
+    font-size:13px;color:var(--gold-100);margin:0 0 2px;
+  }
+  header .address{
+    font-size:12px;color:#E7D9C6;margin:0 0 14px;
+  }
+  header .tagline{
+    display:inline-block;
+    background:var(--gold-500);
+    color:var(--red-900);
+    font-weight:600;
+    font-size:12px;
+    padding:5px 14px;
+    border-radius:999px;
+    letter-spacing:0.4px;
+  }
+  header .formtitle{
+    margin-top:18px;font-size:17px;font-weight:600;
+  }
+
+  main{padding:0 20px;}
+
+  .section{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px 20px 8px;
+    margin-top:20px;
+  }
+  .section h2{
+    font-size:15px;
+    margin:0 0 16px;
+    color:var(--red-700);
+    font-weight:600;
+    display:flex;align-items:center;gap:8px;
+  }
+  .section h2 .num{
+    background:var(--red-700);color:#fff;
+    width:22px;height:22px;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;
+    font-size:12px;flex-shrink:0;
+  }
+
+  .field{margin-bottom:16px;}
+  .field label{
+    display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px;
+  }
+  .field label .opt{font-weight:400;color:var(--ink-muted);}
+  .field input[type="text"],
+  .field input[type="date"],
+  .field input[type="tel"],
+  .field input[type="email"],
+  .field input[type="number"],
+  .field select,
+  .field textarea{
+    width:100%;
+    padding:10px 12px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    font-size:14px;
+    color:var(--ink);
+    background:#fff;
+    font-family:inherit;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{
+    outline:none;border-color:var(--gold-600);box-shadow:0 0 0 3px rgba(201,151,30,0.18);
+  }
+  .field textarea{resize:vertical;min-height:64px;}
+  .error-msg{display:none;font-size:12px;color:var(--danger);margin-top:5px;}
+  .field.invalid input,.field.invalid select,.field.invalid textarea{border-color:var(--danger);}
+  .field.invalid .error-msg{display:block;}
+
+  .radio-row,.check-row{display:flex;flex-wrap:wrap;gap:10px 20px;}
+  .radio-opt,.check-opt{
+    display:flex;align-items:center;gap:6px;font-size:14px;color:var(--ink);
+  }
+  .radio-opt input,.check-opt input{width:16px;height:16px;accent-color:var(--red-700);}
+
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media (max-width:480px){.row2{grid-template-columns:1fr;}}
+
+  .declaration{
+    font-size:13px;color:var(--ink-muted);
+    background:var(--gold-100);
+    border-radius:8px;padding:14px;
+    margin-bottom:16px;
+  }
+  .declaration .check-opt{margin-top:10px;font-weight:600;color:var(--ink);}
+
+  .submit-bar{padding:24px 0 0;text-align:center;}
+  button#submitBtn{
+    background:var(--red-700);
+    color:#fff;border:none;
+    padding:14px 40px;
+    font-size:15px;font-weight:600;
+    border-radius:999px;
+    cursor:pointer;
+    box-shadow:0 2px 8px rgba(74,16,16,0.25);
+  }
+  button#submitBtn:disabled{opacity:0.6;cursor:not-allowed;}
+  button#submitBtn:hover:not(:disabled){background:var(--red-900);}
+
+  .status{
+    text-align:center;font-size:13px;margin-top:12px;color:var(--ink-muted);
+  }
+  .status.error{color:var(--danger);}
+
+  #successScreen{
+    display:none;
+    text-align:center;
+    padding:60px 24px;
+  }
+  #successScreen .check{
+    width:60px;height:60px;border-radius:50%;
+    background:var(--red-700);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 18px;font-size:28px;
+  }
+  #successScreen h2{color:var(--red-700);margin-bottom:8px;}
+  #successScreen p{color:var(--ink-muted);font-size:14px;}
+
+  footer{text-align:center;font-size:11px;color:var(--ink-muted);padding:26px 20px 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo-badge">
+      <img src="data:image/jpeg;base64,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" alt="Christ Apostolic Church logo">
+    </div>
+    <h1>CHRIST APOSTOLIC CHURCH</h1>
+    <div class="district">OKE IYANU, MOUNTAIN OF WONDERS DISTRICT HQRT. OGIJO</div>
+    <div class="address">Sebiro Street, Ogijo, Ogun State</div>
+    <div class="tagline">ONE FOLD, ONE SHEPHERD &mdash; JOHN 10:16</div>
+    <div class="formtitle">Church Members&rsquo; Bio-Data Form</div>
+  </header>
+
+  <main>
+    <form id="biodataForm" novalidate>
+
+      <div class="section">
+        <h2><span class="num">1</span>Personal details</h2>
+
+        <div class="field" data-required="true">
+          <label for="fullName">Full name</label>
+          <input type="text" id="fullName" name="Full Name">
+          <div class="error-msg">Please enter the full name.</div>
+        </div>
+
+        <div class="row2">
+          <div class="field" data-required="true">
+            <label for="dob">Date of birth</label>
+            <input type="date" id="dob" name="Date of Birth">
+            <div class="error-msg">Please select a date of birth.</div>
+          </div>
+          <div class="field" data-required="true">
+            <label>Sex</label>
+            <div class="radio-row">
+              <label class="radio-opt"><input type="radio" name="Sex" value="Male">Male</label>
+              <label class="radio-opt"><input type="radio" name="Sex" value="Female">Female</label>
+            </div>
+            <div class="error-msg">Please select sex.</div>
+          </div>
+        </div>
+
+        <div class="field" data-required="true">
+          <label>Marital status</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="Marital Status" value="Single">Single</label>
+            <label class="radio-opt"><input type="radio" name="Marital Status" value="Married">Married</label>
+            <label class="radio-opt"><input type="radio" name="Marital Status" value="Widowed">Widowed</label>
+            <label class="radio-opt"><input type="radio" name="Marital Status" value="Divorced">Divorced</label>
+          </div>
+          <div class="error-msg">Please select marital status.</div>
+        </div>
+
+        <div class="row2">
+          <div class="field" data-required="true">
+            <label for="stateOrigin">State of origin</label>
+            <input type="text" id="stateOrigin" name="State of Origin">
+            <div class="error-msg">Please enter state of origin.</div>
+          </div>
+          <div class="field" data-required="true">
+            <label for="lga">LGA</label>
+            <input type="text" id="lga" name="LGA">
+            <div class="error-msg">Please enter LGA.</div>
+          </div>
+        </div>
+
+        <div class="field" data-required="true">
+          <label for="address">Residential address</label>
+          <textarea id="address" name="Residential Address"></textarea>
+          <div class="error-msg">Please enter a residential address.</div>
+        </div>
+
+        <div class="row2">
+          <div class="field" data-required="true">
+            <label for="phone">Phone / WhatsApp no.</label>
+            <input type="tel" id="phone" name="Phone/WhatsApp No.">
+            <div class="error-msg">Please enter a phone number.</div>
+          </div>
+          <div class="field" data-required="true">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="Email">
+            <div class="error-msg">Please enter a valid email.</div>
+          </div>
+        </div>
+
+        <div class="field" data-required="true">
+          <label for="occupation">Occupation / profession</label>
+          <input type="text" id="occupation" name="Occupation/Profession">
+          <div class="error-msg">Please enter an occupation.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2><span class="num">2</span>Family details</h2>
+        <div class="field">
+          <label for="spouse">Spouse&rsquo;s name <span class="opt">(if applicable)</span></label>
+          <input type="text" id="spouse" name="Spouse's Name">
+        </div>
+        <div class="field">
+          <label for="children">Number of children</label>
+          <input type="number" id="children" name="Number of Children" min="0">
+        </div>
+      </div>
+
+      <div class="section">
+        <h2><span class="num">3</span>Next of kin</h2>
+        <div class="field" data-required="true">
+          <label for="nokName">Full name</label>
+          <input type="text" id="nokName" name="Next of Kin Full Name">
+          <div class="error-msg">Please enter next of kin's name.</div>
+        </div>
+        <div class="row2">
+          <div class="field" data-required="true">
+            <label for="nokRel">Relationship</label>
+            <input type="text" id="nokRel" name="Next of Kin Relationship">
+            <div class="error-msg">Please enter relationship.</div>
+          </div>
+          <div class="field" data-required="true">
+            <label for="nokPhone">Phone no.</label>
+            <input type="tel" id="nokPhone" name="Next of Kin Phone">
+            <div class="error-msg">Please enter a phone number.</div>
+          </div>
+        </div>
+        <div class="field" data-required="true">
+          <label for="nokAddress">Address</label>
+          <textarea id="nokAddress" name="Next of Kin Address"></textarea>
+          <div class="error-msg">Please enter an address.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2><span class="num">4</span>Church details</h2>
+        <div class="row2">
+          <div class="field" data-required="true">
+            <label for="dateJoined">Date joined the church</label>
+            <input type="date" id="dateJoined" name="Date Joined Church">
+            <div class="error-msg">Please select a date.</div>
+          </div>
+          <div class="field">
+            <label for="baptism">Date of baptism</label>
+            <input type="date" id="baptism" name="Date of Baptism">
+          </div>
+        </div>
+        <div class="field" data-required="true">
+          <label for="department">Ministry / department</label>
+          <input type="text" id="department" name="Ministry/Department">
+          <div class="error-msg">Please enter ministry / department.</div>
+        </div>
+        <div class="field">
+          <label for="prevChurch">Previous church <span class="opt">(if applicable)</span></label>
+          <input type="text" id="prevChurch" name="Previous Church">
+        </div>
+      </div>
+
+      <div class="section">
+        <h2><span class="num">5</span>Emergency contact</h2>
+        <div class="field" data-required="true">
+          <label for="emName">Name</label>
+          <input type="text" id="emName" name="Emergency Contact Name">
+          <div class="error-msg">Please enter a name.</div>
+        </div>
+        <div class="row2">
+          <div class="field" data-required="true">
+            <label for="emRel">Relationship</label>
+            <input type="text" id="emRel" name="Emergency Contact Relationship">
+            <div class="error-msg">Please enter relationship.</div>
+          </div>
+          <div class="field" data-required="true">
+            <label for="emPhone">Phone no.</label>
+            <input type="tel" id="emPhone" name="Emergency Contact Phone">
+            <div class="error-msg">Please enter a phone number.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2><span class="num">6</span>Declaration</h2>
+        <div class="declaration">
+          I confirm that the information provided above is correct and may be used by the church for membership records, communication, pastoral care, and church administration.
+          <label class="check-opt">
+            <input type="checkbox" id="declareCheck" name="Declaration">
+            I confirm the above
+          </label>
+        </div>
+      </div>
+
+      <div class="submit-bar">
+        <button type="submit" id="submitBtn">Submit bio-data</button>
+        <div class="status" id="statusMsg"></div>
+      </div>
+    </form>
+
+    <div id="successScreen">
+      <div class="check">&#10003;</div>
+      <h2>Thank you</h2>
+      <p>Your bio-data has been submitted to the church records.<br>You may close this page now.</p>
+    </div>
+  </main>
+
+  <footer>Christ Apostolic Church &mdash; Oke Iyanu, Mountain of Wonders District HQRT. Ogijo</footer>
+</div>
+
+<script>
+  // Replace this with the Web App URL you get after deploying the Apps Script (see setup guide).
+  var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQAzruU1LaCQTqYKxM4DgdMTl0UnfkYHVA5TmrmJNfbN1HU9H0mVuJJz4Gn8PA1y_FgQ/exec";
+
+  var form = document.getElementById('biodataForm');
+  var submitBtn = document.getElementById('submitBtn');
+  var statusMsg = document.getElementById('statusMsg');
+  var successScreen = document.getElementById('successScreen');
+
+  function emailValid(v){
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  }
+
+  function validate(){
+    var ok = true;
+    var fields = form.querySelectorAll('.field[data-required="true"]');
+    fields.forEach(function(field){
+      var input = field.querySelector('input[type="text"], input[type="date"], input[type="tel"], input[type="email"], input[type="number"], textarea');
+      var radios = field.querySelectorAll('input[type="radio"]');
+      var invalid = false;
+      if (radios.length){
+        var checked = field.querySelector('input[type="radio"]:checked');
+        invalid = !checked;
+      } else if (input){
+        var val = input.value.trim();
+        invalid = val === '';
+        if (!invalid && input.type === 'email' && !emailValid(val)) invalid = true;
+      }
+      field.classList.toggle('invalid', invalid);
+      if (invalid) ok = false;
+    });
+    var declareField = document.getElementById('declareCheck');
+    if (!declareField.checked){
+      ok = false;
+      statusMsg.textContent = 'Please confirm the declaration before submitting.';
+      statusMsg.classList.add('error');
+    }
+    return ok;
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    statusMsg.classList.remove('error');
+    statusMsg.textContent = '';
+
+    if (!validate()){
+      if (!statusMsg.textContent) statusMsg.textContent = 'Please fill in all required fields.';
+      statusMsg.classList.add('error');
+      var firstInvalid = form.querySelector('.invalid');
+      if (firstInvalid) firstInvalid.scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
+
+    if (SCRIPT_URL.indexOf('PASTE_YOUR') === 0){
+      statusMsg.textContent = 'Form is not yet connected to storage. See setup guide.';
+      statusMsg.classList.add('error');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    statusMsg.textContent = 'Submitting...';
+
+    var data = new FormData(form);
+    var obj = {};
+    data.forEach(function(value, key){ obj[key] = value; });
+    obj['Submitted At'] = new Date().toISOString();
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(obj)
+    }).then(function(){
+      form.style.display = 'none';
+      document.querySelector('.submit-bar').style.display = 'none';
+      successScreen.style.display = 'block';
+    }).catch(function(){
+      submitBtn.disabled = false;
+      statusMsg.textContent = 'Something went wrong. Please check your connection and try again.';
+      statusMsg.classList.add('error');
+    });
+  });
+</script>
+</body>
+</html>
